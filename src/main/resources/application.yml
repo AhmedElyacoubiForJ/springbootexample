@@ -1,2 +1,12 @@
 server:
   port: 9090
+
+# starting spring-boot without webserver configuration
+#spring:
+#  main:
+#    web-application-type: none
+
+# conf is per default & not needed
+spring:
+  main:
+    web-application-type: servlet
