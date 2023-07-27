@@ -13,8 +13,15 @@ public class Main {
 		SpringApplication.run(Main.class, args);
 	}
 
-	@GetMapping("/greet")
+	@GetMapping("/greetAsString")
 	public String greet() {
-		return "hello form first rest api";
+		return "hello, response as string";
 	}
+
+    @GetMapping("/greetAsObject")
+    public GreetResponse greetAsResponse() {
+		return new GreetResponse("hello, response as json object");
+    }
+
+    record GreetResponse(String message) {}
 }
