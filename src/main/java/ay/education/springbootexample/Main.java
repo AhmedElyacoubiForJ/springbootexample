@@ -5,11 +5,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 
 @SpringBootApplication
 @RestController
 public class Main {
+
+	private GreetResponse response;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Main.class, args);
@@ -22,13 +25,23 @@ public class Main {
 
     @GetMapping("/greetAsObject")
     public GreetResponse greetAsResponse() {
-		return new GreetResponse("hello, response as json object");
+		GreetResponse response = new GreetResponse(
+				"hello, response as json object (w. different field types)",
+				List.of("Java", "Kotlin", "JavaScript"),
+				new Person("Peter", 45, 300_000)
+		);
+		return response;
     }
 
-    // record GreetResponse(String message) {}
+	record Person(String name, int age, double savings) {}
 
+    record GreetResponse(
+			String message,
+			List<String> favProgrammingLanguages,
+			Person person
+			) {}
 	// class def. is the same thing as record def.
-	class GreetResponse {
+	/*class GreetResponse {
 		private final String message;
 
 		public GreetResponse(String message) {
@@ -58,5 +71,5 @@ public class Main {
 		public int hashCode() {
 			return Objects.hash(message);
 		}
-	}
+	}*/
 }
