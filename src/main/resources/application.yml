@@ -6,7 +6,6 @@ server:
 #  main:
 #    web-application-type: none
 
-# conf is per default & not needed
 spring:
   h2:
     console:
@@ -24,5 +23,6 @@ spring:
       hibernate:
       dialect: org.hibernate.dialect.H2Dialect
       format_sql: true
+  # conf is per default & not needed
   main:
     web-application-type: servlet
