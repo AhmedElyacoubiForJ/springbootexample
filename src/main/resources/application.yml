@@ -8,5 +8,21 @@ server:
 
 # conf is per default & not needed
 spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:customer
+    username: user
+    password: 1234
+    driverClassName: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+      dialect: org.hibernate.dialect.H2Dialect
+      format_sql: true
   main:
     web-application-type: servlet
