@@ -1,46 +1,85 @@
 package ay.education.springbootexample;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Stream;
 
 @SpringBootApplication
 @RestController
+@RequestMapping("api/v1/customers")
 public class Main {
 
-	private GreetResponse response;
+    public final CustomerRepository customerRepository;
 
-	public static void main(String[] args) {
-		SpringApplication.run(Main.class, args);
+    public Main(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
+    }
+
+	@Bean
+	CommandLineRunner start(CustomerRepository customerRepository) {
+		return args -> {
+			Customer customer = new Customer();
+			customer.setName("Peter");
+			customer.setAge(20);
+			customer.setEmail("peter@gmx.de");
+			customerRepository.save(customer);
+
+			customer = new Customer();
+			customer.setName("Jamila");
+			customer.setAge(22);
+			customer.setEmail("jamila@gmx.de");
+			customerRepository.save(customer);
+
+			customer = new Customer();
+			customer.setName("Ahmed");
+			customer.setAge(23);
+			customer.setEmail("ahmed@gmx.de");
+			customerRepository.save(customer);
+		};
 	}
 
-	@GetMapping("/greetAsString")
-	public String greet() {
-		return "hello, response as string";
-	}
+    @GetMapping
+    public List<Customer> getCustomers() {
+        //return List.of();
+        return customerRepository.findAll();
+    }
+
+    @GetMapping("/greetAsString")
+    public String greet() {
+        return "hello, response as string";
+    }
 
     @GetMapping("/greetAsObject")
     public GreetResponse greetAsResponse() {
-		GreetResponse response = new GreetResponse(
-				"hello, response as json object (w. different field types)",
-				List.of("Java", "Kotlin", "JavaScript"),
-				new Person("Peter", 45, 300_000)
-		);
-		return response;
+        GreetResponse response = new GreetResponse(
+                "hello, response as json object (w. different field types)",
+                List.of("Java", "Kotlin", "JavaScript"),
+                new Person("Peter", 45, 300_000)
+        );
+        return response;
     }
 
-	record Person(String name, int age, double savings) {}
+    record Person(String name, int age, double savings) {
+    }
 
     record GreetResponse(
-			String message,
-			List<String> favProgrammingLanguages,
-			Person person
-			) {}
-	// class def. is the same thing as record def.
+            String message,
+            List<String> favProgrammingLanguages,
+            Person person
+    ) {
+    }
+    // class def. is the same thing as record def.
 	/*class GreetResponse {
 		private final String message;
 
